@@ -47,7 +47,7 @@ router.post('/',[auth,[check('name','Name is required').not().isEmpty()]],async 
         res.status(500).send("Server Error");
     }
 
-});
+}); 
 
 
 // @route    PUT api/contacts/:id
@@ -56,11 +56,8 @@ router.post('/',[auth,[check('name','Name is required').not().isEmpty()]],async 
 
 router.put('/:id',auth, async(req,res)=>{
     
-    const errors = validationResult(req);
-    if(!errors.isEmpty()){
-        return res.status(400).json({errors:errors.array()});
-    }
 
+    
     const {name,email,phone,type}=req.body;
 
     //Build Contact Object
@@ -73,6 +70,8 @@ router.put('/:id',auth, async(req,res)=>{
 
     try {
         let contact= await Contact.findById(req.params.id); 
+
+
         if(!contact) return res.status(404).json({msg:'Contact not found'});
 
         // Make sure user owns contact
