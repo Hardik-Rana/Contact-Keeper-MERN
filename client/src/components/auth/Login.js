@@ -57,7 +57,7 @@ const Login = props => {
         </h1>
         <form onSubmit={onSubmit}>
             <div className="from-group">
-                <label htmlFor="email">Email Address</label>
+                <label autoComplete='off' htmlFor="email">Email Address</label>
                 <input type="email" name="email" value={email} onChange={onChange} />
             </div>
             <div className="from-group">
