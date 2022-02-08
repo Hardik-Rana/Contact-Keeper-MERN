@@ -39,7 +39,7 @@ const AuthState=(props)=>{
            
 
         } catch (err) {
-            dispatch({AUTH_ERROR});
+            dispatch({type:AUTH_ERROR});
         }
         
        };

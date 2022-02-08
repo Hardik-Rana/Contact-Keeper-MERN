@@ -1,61 +1,100 @@
 import React,{useReducer} from 'react';
-import {v4} from 'uuid';
+import axios from 'axios';
 import contactContext from './contactContext';
 import contactReducer from './contactReducer';
 import {
+    GET_CONTACTS,
     ADD_CONTACT,
     DELETE_CONTACT,
     SET_CURRENT,
     CLEAR_CURRENT,
     UPDATE_CONTACT,
     FILTER_CONTACTS,
-    CLEAR_FILTER
+    CLEAR_CONTACTS,
+    CONTACT_ERROR,
+    CLEAR_FILTER,
+    CHANGE_LINK,
+    SET_LINK
+
 } from '../types';
 
 
 const ContactState=(props)=>{
 
     const initialState={
-        contacts:[
-            {   
-                id:1,
-                name:'hardik',
-                email:'hardik@gmail.com',
-                phone:'1234567890',
-                type:'personal'
-            },
-            {   
-                id:2,
-                name:'rana',
-                email:'rana@gmail.com',
-                phone:'987654321',
-                type:'personal'
-            },
-            {
-                id:3,
-                name:'admin',
-                email:'admin@gmail.com',
-                phone:'5555555555',
-                type:'professional'
-            }
-        ],
+        contacts:null,
         current: null,
-        filtered: null
+        filtered: null,
+        error: null,
+        change:{
+            link:'/about',
+            tag:'About'
+        }
     };
 
         const [state,dispatch]=useReducer(contactReducer,initialState);
 
-        // Add Contact
-        const addContact=contact=>{
+        // Get Contacts
+        const getContact= async ()=>{
 
-            contact.id=v4();
-            dispatch({type:ADD_CONTACT,payload:contact});
+            try {
+                const res = await axios.get('/api/contacts'); 
+                dispatch({type:GET_CONTACTS,payload:res.data.contacts});
+            
+            } catch (err) {
+                dispatch({type:CONTACT_ERROR,payload: err.response.msg});
+            }
+        };
+
+        // Add Contact
+        const addContact= async contact=>{
+
+            const config ={
+                headers:{
+                    'Content-Type' : 'application/json'
+                }
+            };
+            
+            try {
+                const res = await axios.post('/api/contacts',contact,config); 
+                dispatch({type:ADD_CONTACT,payload:res.data});
+            
+            } catch (err) {
+                dispatch({type:CONTACT_ERROR,payload:err.response.msg});
+            }
         };
         // Delete Contact
-        const deleteContact=id=>{
+        const deleteContact= async id=>{
 
-            dispatch({type:DELETE_CONTACT,payload:id});
+            try {
+               await axios.delete(`/api/contacts/${id}`); 
+                dispatch({type:DELETE_CONTACT,payload: id});
+            } catch (err) {
+                dispatch({type:CONTACT_ERROR,payload:err.response.msg});
+            }
+
         };
+
+        //  Update Contact
+        const updateContact= async contact=>{
+
+            const config ={
+                headers:{
+                    'Content-Type' : 'application/json'
+                }
+            };
+            
+            try {
+                const res = await axios.put(`/api/contacts/${contact._id}`,contact,config); 
+                dispatch({type:UPDATE_CONTACT,payload:res.data});
+            
+            } catch (err) {
+                dispatch({type:CONTACT_ERROR,payload:err.response.msg});
+            }
+
+           
+        };
+
 
         // Set Current Contact
         const setCurrent=(contact)=>{
@@ -68,13 +107,15 @@ const ContactState=(props)=>{
 
             dispatch({type:CLEAR_CURRENT});
         };
-        
-        //  Update Contact
-        const updateContact=contact=>{
 
-            dispatch({type:UPDATE_CONTACT,payload:contact});
+        // Clear Contacts 
+
+        const clearContacts=()=>{
+
+            dispatch({type:CLEAR_CONTACTS});
         };
-
+        
+        
         //  Filter Contacts
         const filterContacts=text=>{
 
@@ -86,7 +127,21 @@ const ContactState=(props)=>{
 
             dispatch({type:CLEAR_FILTER});
         };
+        
+        //  Change link
+        const changelink=()=>{
+          
+            dispatch({type:CHANGE_LINK}); 
+          
+            if(state.change.link==='/')
+            {
+                dispatch({type:SET_LINK});
+            }
+            
+         
+         };
 
+       
         return (
 
             <contactContext.Provider
@@ -94,9 +149,11 @@ const ContactState=(props)=>{
                    {
                        contacts:state.contacts,
                        current:state.current,
-                       filtered:state.filtered,
+                       error:state.error,
+                       filtered:state.filtered,change:state.change,
+                       changelink,
                        addContact,deleteContact,setCurrent,clearCurrent,updateContact,
-                       filterContacts,clearFilter
+                       filterContacts,clearFilter,getContact,clearContacts
                    }
                }
             >

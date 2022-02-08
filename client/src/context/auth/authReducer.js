@@ -25,9 +25,8 @@ export default (state, action)=>{
         };
  
         case REGISTER_SUCCESS:
-        case AUTH_ERROR:
         case LOGIN_SUCCESS:    
-        localStorage.setItem('token',action.payload.token);    
+        localStorage.setItem('token',action.payload.token); 
         return {
             ...state,
             ...action.payload,
