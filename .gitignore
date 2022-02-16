@@ -1,7 +1,6 @@
 node_modules
-default.json
 .history
-
+/routes/def.json
 
 .DS_Store
 /client/.env.local
