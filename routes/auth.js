@@ -7,6 +7,9 @@ const config=require('config');
 const auth = require('../middleware/auth');
 const {validationResult, check } = require('express-validator');
 
+const dotenv = require('dotenv');
+dotenv.config();
+
 // @route    GET api/auth
 // @desc     Get logged in user
 // @access   Private
@@ -61,7 +64,7 @@ async(req,res)=>{
             }
         }
 
-        jwt.sign(payload,config.get('jwtSecret'),{
+        jwt.sign(payload,process.env.jwtSecret,{
             expiresIn:360000
         },(err,token)=>{
             if(err) throw err;

@@ -6,10 +6,13 @@ const bcrypt = require("bcryptjs");
 const nodemailer = require("nodemailer");
 var hbs = require("nodemailer-express-handlebars");
 const config = require("config");
-const usermail = config.get("user");
-const passmail = config.get("pass");
+const dotenv = require('dotenv');
+dotenv.config();
 
-//efwef
+const usermail = process.env.user;
+const passmail = process.env.pass
+
+
 
 // @route    POST api/email
 // @desc     For Forgot-Password

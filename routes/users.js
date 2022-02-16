@@ -6,6 +6,9 @@ const jwt = require('jsonwebtoken');
 const config=require('config');
 const { validationResult, check } = require('express-validator');
 
+const dotenv = require('dotenv');
+dotenv.config();
+
 // @route    POST api/users
 // @desc     Register a user
 // @access   Public
@@ -49,7 +52,7 @@ router.post('/',[
             }
         }
 
-        jwt.sign(payload,config.get('jwtSecret'),{
+        jwt.sign(payload,process.env.jwtSecret,{
             expiresIn:360000
         },(err,token)=>{
             if(err) throw err;
