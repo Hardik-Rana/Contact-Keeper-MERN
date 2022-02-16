@@ -1,6 +1,7 @@
 node_modules
-.history
 default.json
+.history
+
 
 .DS_Store
 /client/.env.local
