@@ -1,7 +1,7 @@
 node_modules
 default.json
 .history
-/routes/email.js
+
 
 .DS_Store
 /client/.env.local
