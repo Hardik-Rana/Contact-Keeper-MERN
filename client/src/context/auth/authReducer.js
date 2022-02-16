@@ -52,7 +52,8 @@ export default (state, action)=>{
                 isAuthenticated :false,
                 loading:false,
                 user:null,
-                error:action.payload
+                error:action.payload,
+                spin:false
 
             }
 

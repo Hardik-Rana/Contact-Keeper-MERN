@@ -28,6 +28,7 @@ const Email = () => {
   {
       setAlert(error,'danger',3000);
       clearErrors();
+
   }
 
   if(error === 'OTP does not match.'){
