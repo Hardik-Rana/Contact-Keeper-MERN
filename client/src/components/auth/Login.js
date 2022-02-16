@@ -1,6 +1,8 @@
 import React,{useState,useEffect,useContext} from 'react';
 import AlertContext from '../../context/alert/alertContext';
 import AuthContext from '../../context/auth/authContext';
+import {Link} from 'react-router-dom';
+
 
 const Login = props => {
 
@@ -8,7 +10,7 @@ const Login = props => {
     const authContext=useContext(AuthContext);
     
     const {setAlert}=alertContext;
-    const {login,error,clearErrors, isAuthenticated}=authContext;
+    const {login,error,clearErrors, isAuthenticated, verified}=authContext;
 
     useEffect(()=>{
 
@@ -49,6 +51,8 @@ const Login = props => {
         }
 
     }
+    
+   
 
   return <div className='form-container'>
 
@@ -64,6 +68,10 @@ const Login = props => {
                 <label htmlFor="password">Password</label>
                 <input type="password" name="password" value={password} onChange={onChange} />
             </div>
+            <div className='text-center'> 
+               <Link to='/login/password'> <p>Forgot Password ?</p> </Link>
+               
+             </div>
             <input type="submit" value="Login" className='btn btn-primary btn-block'/>
         </form>
   </div>;

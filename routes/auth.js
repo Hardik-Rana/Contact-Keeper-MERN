@@ -22,6 +22,7 @@ router.get('/',auth, async (req,res)=>{
     }
 });
 
+
 // @route    POST api/auth
 // @desc     Auth user and get token
 // @access   Public
@@ -41,6 +42,7 @@ async(req,res)=>{
     try {
         
         let user=await User.findOne({email});
+
 
         if(!user){
          return res.status(400).json({msg:"Invalid Credentials"});

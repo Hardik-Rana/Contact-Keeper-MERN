@@ -1,7 +1,7 @@
 import './App.css';
 import Navbar from './components/layout/Navbar';
 import {BrowserRouter as Router,Route,Switch} from 'react-router-dom';
-import { Fragment } from 'react';
+import { Fragment ,useContext} from 'react';
 import Home from './components/pages/Home';
 import About from './components/pages/About';
 import ContactState from './context/contact/ContactState';
@@ -11,7 +11,9 @@ import Register from './components/auth/Register';
 import Login from './components/auth/Login';
 import Alert from './components/layout/Alerts'
 import setAuthToken from './utils/setAuthToken';
+import Email from './components/auth/Email'
 import PrivateRoute from './components/routing/PrivateRoute';
+
 
 
 if(localStorage.token) {
@@ -34,6 +36,7 @@ const App=()=> {
       <Route exact path="/about" component={About} />
       <Route exact path="/register" component={Register} />
       <Route exact path="/login" component={Login} />
+      <Route exact path="/login/password" component={Email}/>
       </Switch>
       </div>
     </Fragment>

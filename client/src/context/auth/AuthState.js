@@ -8,24 +8,34 @@ import {
     USER_LOADED,
     AUTH_ERROR,
     LOGIN_SUCCESS,
+    EMAIL_SUCCESS,
+    EMAIL_NOT_FOUND,
     LOGIN_FAIL,
     LOGOUT,
-    CLEAR_ERRORS
+    CLEAR_ERRORS,
+    OTP_MATCH,
+    OTP_FAIL,SPIN,UPDATE_PASSWORD
 } from '../types';
 import setAuthToken from '../../utils/setAuthToken';
 
 
 const AuthState=(props)=>{
 
+
     const initialState={
         token: localStorage.getItem('token'),
         isAuthenticated :null,
         loading: true,
         user:null,
-        error:null       
+        error:null,
+        verified:null,
+        mailsent:null,
+        spin:false
     };
 
-        const [state,dispatch]=useReducer(authReducer,initialState);
+    const [state,dispatch]=useReducer(authReducer,initialState);
+
+
 
        // Load User
        const loadUser= async ()=>{
@@ -99,7 +109,83 @@ const AuthState=(props)=>{
 
        //Clear Errors
        const clearErrors=()=>dispatch({type:CLEAR_ERRORS});
-       
+
+     
+      // Forgot Password
+
+       const forgotpassword= async (email)=>{
+
+        dispatch({type:SPIN});
+
+        const config={
+            headers: {
+                'Content-Type':'application/json'
+            }
+        }
+
+        try {
+           
+          const res = await axios.post('/api/email',{email},config);
+          
+            dispatch({
+                type:EMAIL_SUCCESS,
+                payload:res.data.msg
+            });
+           
+
+        } catch (err) {
+           
+            dispatch({
+                type:EMAIL_NOT_FOUND,payload:err.response.data.msg 
+            });
+            
+        }
+
+       };
+
+         //OTP Match
+         const otp_match= async otp=>{
+        
+            const config={
+                headers: {
+                    'Content-Type':'application/json'
+                }
+            }
+               
+                    
+                const res=await axios.post('/api/email/match',{otp},config);
+
+                if(res.data.msg ==='OTP matched!')
+                {
+                    dispatch({type:OTP_MATCH});
+                }
+                else{
+
+                    dispatch({type:OTP_FAIL,payload:res.data.msg});
+                }
+                       
+        }
+           
+
+       // UpdatePassword
+
+            const  UpdatePassword= async  formData=>{
+                
+                const config ={
+                    headers:{
+                        'Content-Type' : 'application/json'
+                    }
+                };
+
+                try {
+                    const res = await axios.put(`/api/email`, formData,config); 
+                    dispatch({type:UPDATE_PASSWORD,payload:res.data.msg});
+                
+                
+                } catch (err) {
+                    console.error(err.message);
+                }
+            };
 
         return (
 
@@ -111,7 +197,11 @@ const AuthState=(props)=>{
                       loading:state.loading,
                       user:state.user,
                       error:state.error,
-                      register,loadUser,login,logout,clearErrors 
+                      verified:state.verified,
+                      mailsent:state.mailsent,
+                      spin:state.spin,
+                      register,loadUser,login,logout,clearErrors,forgotpassword,otp_match,
+                      UpdatePassword
                     }
             }
             >

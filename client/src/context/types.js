@@ -20,8 +20,15 @@ export const LOGOUT='LOGOUT';
 export const CLEAR_ERRORS='CLEAR_ERRORS';
 export const CHANGE_LINK='CHANGE_LINK';
 export const SET_LINK='SET_LINK';
-
-
+export const EMAIL_SUCCESS='EMAIL_SUCCESS';
+export const EMAIL_NOT_FOUND='EMAIL_NOT_FOUND';
+export const REMOVE_MSG='REMOVE_MSG';
+export const OTP_MATCH='OTP_MATCH';
+export const OTP='OTP';
+export const OTP_FAIL='OTP_FAIL';
+export const UPDATE_PASSWORD='UPDATE_PASSWORD';
+export const PASSWORD_ERROR='PASSWORD_ERROR';
+export const SPIN='SPIN';
 
 
 
